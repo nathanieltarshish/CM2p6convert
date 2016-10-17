@@ -96,7 +96,7 @@ R_EARTH = 6.371*10**6   # equatorial radius of the earth in meters
 depth = (Z0*bathmask).astype(dtype='float64')
 
 Tcell_height = ncdata.variables[Tcell_height_key][0:cutoff_index:]
-delY = Tcell_height/R_EARTH*(180/math.pi)  # units are degrees
+delY = Tcell_height/R_EARTH*(180/math.pi)*3600  # units are arcseconds
 delY = delY.astype(dtype='float64')
 
 if np.shape(delY) != np.shape(bathmask):
@@ -113,7 +113,7 @@ if args.plot:
     plt.pcolormesh(lon, lat, depth, cmap='bwr')
     plt.colorbar()
     plt.subplot(2, 1, 2)
-    plt.title('delY [degrees]')
+    plt.title('delY [arcseconds]')
     plt.pcolormesh(lon, lat, delY, cmap='gist_ncar')
     plt.colorbar()
     plt.savefig(out_folder+"grid_verification.png")
