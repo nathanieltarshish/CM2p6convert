@@ -85,11 +85,10 @@ print "lon_key = ", lon_key
 lat = ncdata.variables[lat_key][...]
 lon = ncdata.variables[lon_key][...]
 
-
 lat_max = np.shape(lat)[0]
 cutoff_index = nearest_index(lat[:], cutoff_value)
 # polar region to throw away exists between latitude interval [cutoff_index, lat_max]
-lat = np.delete(lat, range(cutoff_index, lat_max))  # remove polar region
+lat = np.delete(lat, range(cutoff_index, lat_max))  # removes polar region
 
 bathmask = ncdata.variables[mask_key][0:cutoff_index, :]
 Z0 = -100.0  # arbitrary depth of ocean layer
