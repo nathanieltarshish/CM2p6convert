@@ -36,22 +36,22 @@ def nearest_index(array, value):
 parser = argparse.ArgumentParser(
         description='Generate 2D delY.bin and bathy.bin from CM2.6 grid spec file')
 
-parser.add_argument('--input_grid', metavar='input_grid',
+parser.add_argument('--input_nc', metavar='input_nc',
                     help='the netcdf file containing lat, lon, delY, and land mask')
 
 parser.add_argument('--lat', type=str, metavar='lat_key', default='grid_y_T',
-                    help='the name of geographic latitude variable in input_grid')
+                    help='the name of geographic latitude variable in input_nc')
 
 parser.add_argument('--lon', type=str, metavar='lon_key', default='grid_x_T',
-                    help='the name of geographic longitude variable in input_grid')
+                    help='the name of geographic longitude variable in input_nc')
 
 parser.add_argument('--landmask', type=str, metavar='mask_key', default='wet',
                     help='the name of land mask variable in netcdf file, assumes land = 0, water = 1')
 
 parser.add_argument('--Tcell_height', type=str, metavar='Tcell_height', default='ds_10_12_T',
-                    help='the name of Tcell height variable in input_grid')
+                    help='the name of Tcell height variable in input_nc')
 
-parser.add_argument('--out_folder', default='', metavar='out_folder',
+parser.add_argument('--out_dir', default='', metavar='out_dir',
                     help='the folder for the .bin file ouputs')
 
 parser.add_argument('--plot',
@@ -63,13 +63,13 @@ parser.add_argument('--maxlat', default=65.0, metavar='maxlat',
 
 args = parser.parse_args()
 
-ncpath = args.input_grid  # path to file containing grid data
+ncpath = args.input_nc  # path to file containing grid data
 if ncpath is not None:
     ncdata = nc.Dataset(ncpath)
 else:
-    raise ValueError('no input netcdf file specified (input_grid = None)')
+    raise ValueError('no input netcdf file specified (input_nc = None)')
 
-out_folder = args.out_folder
+out_dir = args.out_dir
 Tcell_height_key = args.Tcell_height
 mask_key = args.landmask
 lat_key = args.lat
@@ -102,8 +102,8 @@ delY = delY.astype(dtype='float64')
 if np.shape(delY) != np.shape(bathmask):
     raise ValueError('Tcell height grid different shape than bathymetry mask grid')
 
-if not os.path.exists(out_folder):
-    os.makedirs(out_folder)
+if not os.path.exists(out_dir):  # create folder for outputs
+    os.makedirs(out_dir)
 
 if args.plot:
     try:
@@ -119,13 +119,13 @@ if args.plot:
     plt.title('delY [arcseconds]')
     plt.pcolormesh(lon, lat, delY, cmap='gist_ncar')
     plt.colorbar()
-    plt.savefig(out_folder+"grid_verification.png")
-    print "plot saved to", out_folder+"grid_verification.png"
+    plt.savefig(out_dir+"grid_verification.png")
+    print "plot saved to", out_dir+"grid_verification.png"
 
 # write out depth as bathy.bin
-bath_file = out_folder+'bathy.bin'
+bath_file = out_dir+'bathy.bin'
 write_field(bath_file, depth)
 
 # write out delY as delY.bin
-delY_file = out_folder+'delY.bin'
+delY_file = out_dir+'delY.bin'
 write_field(delY_file, delY)
