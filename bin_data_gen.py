@@ -102,6 +102,9 @@ delY = delY.astype(dtype='float64')
 if np.shape(delY) != np.shape(bathmask):
     raise ValueError('Tcell height grid different shape than bathymetry mask grid')
 
+if not os.path.exists(out_folder):
+    os.makedirs(out_folder)
+
 if args.plot:
     try:
         import matplotlib.pyplot as plt
