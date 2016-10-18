@@ -86,7 +86,7 @@ lat = ncdata.variables[lat_key][...]
 lon = ncdata.variables[lon_key][...]
 
 lat_max = np.shape(lat)[0]
-cutoff_index = nearest_index(lat[:], cutoff_value)
+cutoff_index = nearest_index(lat[:], cutoff_value)-1  # for CM2p6, index =  2107 value = 64.9732
 # polar region to throw away exists between latitude interval [cutoff_index, lat_max]
 lat = np.delete(lat, range(cutoff_index, lat_max))  # removes polar region
 
