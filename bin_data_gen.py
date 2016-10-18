@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import numpy as np
 import sys
+import os
 import netCDF4 as nc
 import bisect
 import argparse
