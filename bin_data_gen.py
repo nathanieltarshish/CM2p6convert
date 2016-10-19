@@ -52,7 +52,7 @@ parser.add_argument('--landmask', type=str, metavar='mask_key', default='wet',
 parser.add_argument('--Tcell_height', type=str, metavar='Tcell_height', default='ds_10_12_T',
                     help='the name of Tcell height variable in input_nc')
 
-parser.add_argument('--out_dir', default='', metavar='out_dir',
+parser.add_argument('--out_dir', default='./', metavar='out_dir',
                     help='the folder for the .bin file ouputs')
 
 parser.add_argument('--plot',
@@ -96,12 +96,13 @@ Z0 = -100.0  # arbitrary depth of ocean layer
 R_EARTH = 6.371*10**6   # equatorial radius of the earth in meters
 depth = (Z0*bathmask).astype(dtype='float32')
 
-Tcell_height = ncdata.variables[Tcell_height_key][0:cutoff_index:]
+Tcell_height = ncdata.variables[Tcell_height_key][0:cutoff_index,0]
 delY = Tcell_height/R_EARTH*(180/math.pi)*3600  # units are arcseconds
 delY = delY.astype(dtype='float32')
+print np.shape(delY)
 
-if np.shape(delY) != np.shape(bathmask):
-    raise ValueError('Tcell height grid different shape than bathymetry mask grid')
+if np.shape(delY)[0] != np.shape(bathmask)[0]:
+    raise ValueError('Tcell height lat points different than bathymetry mask lat points')
 
 if not os.path.exists(out_dir):  # create folder for outputs
     os.makedirs(out_dir)
@@ -118,8 +119,9 @@ if args.plot:
     plt.colorbar()
     plt.subplot(2, 1, 2)
     plt.title('delY [arcseconds]')
-    plt.pcolormesh(lon, lat, delY, cmap='gist_ncar')
-    plt.colorbar()
+    plt.scatter(lat, delY,  marker='+')
+    plt.xlabel("Latitude (deg)")
+    plt.ylabel("delY [arcseconds]")
     plt.savefig(out_dir+"grid_verification.png")
     print "plot saved to", out_dir+"grid_verification.png"
 
