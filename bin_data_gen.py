@@ -94,11 +94,11 @@ lat = np.delete(lat, range(cutoff_index, lat_max))  # removes polar region
 bathmask = ncdata.variables[mask_key][0:cutoff_index, :]
 Z0 = -100.0  # arbitrary depth of ocean layer
 R_EARTH = 6.371*10**6   # equatorial radius of the earth in meters
-depth = (Z0*bathmask).astype(dtype='float64')
+depth = (Z0*bathmask).astype(dtype='float32')
 
 Tcell_height = ncdata.variables[Tcell_height_key][0:cutoff_index:]
 delY = Tcell_height/R_EARTH*(180/math.pi)*3600  # units are arcseconds
-delY = delY.astype(dtype='float64')
+delY = delY.astype(dtype='float32')
 
 if np.shape(delY) != np.shape(bathmask):
     raise ValueError('Tcell height grid different shape than bathymetry mask grid')
