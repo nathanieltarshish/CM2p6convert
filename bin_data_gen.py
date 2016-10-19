@@ -99,7 +99,7 @@ depth = (Z0*bathmask).astype(dtype='float32')
 Tcell_height = ncdata.variables[Tcell_height_key][0:cutoff_index,0]
 delY = Tcell_height/R_EARTH*(180/math.pi)*3600  # units are arcseconds
 delY = delY.astype(dtype='float32')
-print np.shape(delY)
+delY = delY.transpose() #MITgcm format is indexed by (lon, lat)
 
 if np.shape(delY)[0] != np.shape(bathmask)[0]:
     raise ValueError('Tcell height lat points different than bathymetry mask lat points')
