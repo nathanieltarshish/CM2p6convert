@@ -115,7 +115,7 @@ if args.plot:
     # plot depth and delY fields
     plt.subplot(2, 1, 1)
     plt.title('Depth [m]')
-    plt.pcolormesh(lon, lat, depth, cmap='bwr')
+    plt.pcolormesh(lon, lat, depth.transpose(), cmap='bwr')
     plt.colorbar()
     plt.subplot(2, 1, 2)
     plt.title('delY [arcseconds]')
