@@ -95,11 +95,11 @@ bathmask = ncdata.variables[mask_key][0:cutoff_index, :]
 Z0 = -100.0  # arbitrary depth of ocean layer
 R_EARTH = 6.371*10**6   # equatorial radius of the earth in meters
 depth = (Z0*bathmask).astype(dtype='float32')
+depth = depth.transpose()  # MITgcm format is indexed by (lon, lat)
 
 Tcell_height = ncdata.variables[Tcell_height_key][0:cutoff_index,0]
 delY = Tcell_height/R_EARTH*(180/math.pi)*3600  # units are arcseconds
-delY = delY.astype(dtype='float32')
-delY = delY.transpose() #MITgcm format is indexed by (lon, lat)
+delY = delY.astype(dtype='float32') 
 
 if np.shape(delY)[0] != np.shape(bathmask)[0]:
     raise ValueError('Tcell height lat points different than bathymetry mask lat points')
