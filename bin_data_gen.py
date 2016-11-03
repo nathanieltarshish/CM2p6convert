@@ -98,7 +98,7 @@ depth = (Z0*bathmask).astype(dtype='float32')
 depth = depth.transpose()  # MITgcm format is indexed by (lon, lat)
 
 Tcell_height = ncdata.variables[Tcell_height_key][0:cutoff_index,0]
-delY = Tcell_height/R_EARTH*(180/math.pi)*3600  # units are arcseconds
+delY = Tcell_height/R_EARTH*(180/math.pi) # units are degrees
 delY = delY.astype(dtype='float32') 
 
 if np.shape(delY)[0] != np.shape(bathmask)[0]:
@@ -118,10 +118,10 @@ if args.plot:
     plt.pcolormesh(lon, lat, depth.transpose(), cmap='bwr')
     plt.colorbar()
     plt.subplot(2, 1, 2)
-    plt.title('delY [arcseconds]')
+    plt.title('delY [degrees]')
     plt.scatter(lat, delY,  marker='+')
     plt.xlabel("Latitude (deg)")
-    plt.ylabel("delY [arcseconds]")
+    plt.ylabel("delY [degrees]")
     plt.savefig(out_dir+"grid_verification.png")
     print "plot saved to", out_dir+"grid_verification.png"
 
