@@ -4,11 +4,14 @@ import numpy.ma as ma
 import sys
 import os
 
-half_len_data = nc.Dataset('CM2p6_half_len.nc')
+storagepath = '/archive/net/CM2.6/regrid/'
+out_folder = '/archive/net/CM2.6/regrid/02020101/'
+
+half_len_data = nc.Dataset(storagepath+'CM2p6_half_len.nc')
 lat_T = half_len_data.variables['grid_y_T'][0:2107]
 lon_T = half_len_data.variables['grid_x_T'][...]
 
-vel_sample = nc.Dataset('surf_vel_sample.nc')
+vel_sample = nc.Dataset(storagepath+'surf_vel_sample.nc')
 lat_U = vel_sample.variables['yu_ocean'][0:2107]
 lon_U = vel_sample.variables['xu_ocean'][...]
 
@@ -72,9 +75,9 @@ for tind in range(len(time)):
 	                    /(du_Eface_N[i, j-1] + du_Eface_S[i, j-1] ) )  
 
 	out_filename_u = filename[0:7]+'_'+str(time[tind])+'_'+'U.nc'
-	print 'Saving reformat to: '+out_filename_u
+	print 'Saving reformat to: '+out_folder+out_filename_u
 
-	netcdf_file = nc.Dataset(out_filename_u, 'w', format='NETCDF4')
+	netcdf_file = nc.Dataset(outfolder+out_filename_u, 'w', format='NETCDF4')
 	netcdf_file.createDimension('time', 1)
 	netcdf_file.createDimension('yu_c', len(yu_c))
 	netcdf_file.createDimension('xu_c', len(xu_c))
@@ -105,9 +108,9 @@ for tind in range(len(time)):
 	netcdf_file.close()
 
 	out_filename_v = filename[0:7]+'_'+str(time[tind])+'_'+'V.nc'
-	print 'Saving reformat to: '+out_filename_v
+	print 'Saving reformat to: '+out_folder+out_filename_v
 
-	netcdf_file = nc.Dataset(out_filename_v, 'w', format='NETCDF4')
+	netcdf_file = nc.Dataset(out_folder+out_filename_v, 'w', format='NETCDF4')
 	netcdf_file.createDimension('time', 1)
 	netcdf_file.createDimension('yv_c', len(yv_c))
 	netcdf_file.createDimension('xv_c', len(xv_c))
