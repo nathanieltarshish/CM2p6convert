@@ -34,8 +34,8 @@ for j in range(1,len(lat_U)):
 yv_c[0] = lat_U[0] + (lat_U[0] - lat_U[1])
 
 #the regrid loop 
-path2file = ''
-filename = ''
+path2file = '/archive/Richard.Slater/CM2.6/CM2.6_A_Control-1860_V03/history/'
+filename = '02020101.ocean_minibling_surf_field.nc'
 path = path2file+filename
 vel_data = nc.Dataset(path)
 time = vel_data['time'][:]
@@ -71,7 +71,7 @@ for tind in range(len(time)):
 	        u_C[i,j] = ( (du_Eface_N[i-1, j]*u_B[i-1, j] + du_Eface_S[i-1, j]*u_B[i-1, j-1]) \
 	                    /(du_Eface_N[i, j-1] + du_Eface_S[i, j-1] ) )  
 
-	out_filename_u = filename[-27:-35]+'_'+str(time[tind])+'_'+'U.nc'
+	out_filename_u = filename[0:7]+'_'+str(time[tind])+'_'+'U.nc'
 	print 'Saving reformat to: '+out_filename_u
 
 	netcdf_file = nc.Dataset(out_filename_u, 'w', format='NETCDF4')
