@@ -77,7 +77,7 @@ for tind in range(len(time)):
 	out_filename_u = filename[0:7]+'_'+str(time[tind])+'_'+'U.nc'
 	print 'Saving reformat to: '+out_folder+out_filename_u
 
-	netcdf_file = nc.Dataset(outfolder+out_filename_u, 'w', format='NETCDF4')
+	netcdf_file = nc.Dataset(out_folder+out_filename_u, 'w', format='NETCDF4')
 	netcdf_file.createDimension('time', 1)
 	netcdf_file.createDimension('yu_c', len(yu_c))
 	netcdf_file.createDimension('xu_c', len(xu_c))
