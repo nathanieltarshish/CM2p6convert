@@ -5,12 +5,12 @@ import sys
 import os
 
 half_len_data = nc.Dataset('CM2p6_half_len.nc')
-lat_T = half_len_data['grid_y_T'][0:2107]
-lon_T = half_len_data['grid_x_T'][...]
+lat_T = half_len_data.variables['grid_y_T'][0:2107]
+lon_T = half_len_data.variables['grid_x_T'][...]
 
 vel_sample = nc.Dataset('surf_vel_sample.nc')
-lat_U = vel_sample['yu_ocean'][0:2107]
-lon_U = vel_sample['xu_ocean'][...]
+lat_U = vel_sample.variables['yu_ocean'][0:2107]
+lon_U = vel_sample.variables['xu_ocean'][...]
 
 xu_c = np.zeros(np.shape(lon_U))
 yu_c = np.zeros(np.shape(lat_U))
@@ -38,11 +38,11 @@ path2file = '/archive/Richard.Slater/CM2.6/CM2.6_A_Control-1860_V03/history/'
 filename = '02020101.ocean_minibling_surf_field.nc'
 path = path2file+filename
 vel_data = nc.Dataset(path)
-time = vel_data['time'][:]
+time = vel_data.variables['time'][:]
 
 for tind in range(len(time)):
-	u_B = vel_data['usurf'][tind, 0,0:2107,:] #omits polar region
-	v_B = vel_data['vsurf'][tind, 0,0:2107,:] #omits polar region 
+	u_B = vel_data.variables['usurf'][tind, 0:2107,:] #omits polar region
+	v_B = vel_data.variables['vsurf'][tind, 0:2107,:] #omits polar region 
 
 	u_B = np.transpose(u_B) # convert CM2.6 output from (lat, lon) indexing to (lon, lat) 
 	v_B = np.transpose(v_B) # convert CM2.6 output from (lat, lon) indexing to (lon, lat)
@@ -50,8 +50,8 @@ for tind in range(len(time)):
 	u_B = ma.filled(u_B, fill_value=0.0) #change fill value from -1e20 to 0.0 
 	v_B = ma.filled(v_B, fill_value=0.0) #change fill value from -1e20 to 0.0 
 
-	du_Eface_N = half_len_data['ds_21_22_T'][0:2107, :] #omits polar region
-	du_Eface_S = half_len_data['ds_20_21_T'][0:2107, :] #omits polar region 
+	du_Eface_N = half_len_data.variables['ds_21_22_T'][0:2107, :] #omits polar region
+	du_Eface_S = half_len_data.variables['ds_20_21_T'][0:2107, :] #omits polar region 
 
 	du_Eface_N = np.transpose(du_Eface_N) 
 	du_Eface_S = np.transpose(du_Eface_S) 
@@ -75,7 +75,7 @@ for tind in range(len(time)):
 	print 'Saving reformat to: '+out_filename_u
 
 	netcdf_file = nc.Dataset(out_filename_u, 'w', format='NETCDF4')
-	netcdf_file.createDimension('time', None)
+	netcdf_file.createDimension('time', 1)
 	netcdf_file.createDimension('yu_c', len(yu_c))
 	netcdf_file.createDimension('xu_c', len(xu_c))
 
@@ -93,22 +93,22 @@ for tind in range(len(time)):
 	xu_c_var.units = 'degrees_E'
 	xu_c_var.long_name = 'C grid U point longitude'
 
-	u_var = netcdf_file.createVariable('u', 'f4', ('yu_c', 'xu_c',))
+	u_var = netcdf_file.createVariable('u', 'f4', ('xu_c', 'yu_c',))
 	u_var.units = 'm/s'
 	u_var.long_name = 'zonal velocity on C grid'
 
-	ti[:] = time[tind]
+	ti[0] = time[tind]
 	yu_c = yu_c[:]
 	xu_c = xu_c[:]
 	u_var[...] = u_C 
 
 	netcdf_file.close()
 
-	out_filename_v = filename[-27:-35]+'_'+str(time[tind])+'_'+'V.nc'
+	out_filename_v = filename[0:7]+'_'+str(time[tind])+'_'+'V.nc'
 	print 'Saving reformat to: '+out_filename_v
 
 	netcdf_file = nc.Dataset(out_filename_v, 'w', format='NETCDF4')
-	netcdf_file.createDimension('time', None)
+	netcdf_file.createDimension('time', 1)
 	netcdf_file.createDimension('yv_c', len(yv_c))
 	netcdf_file.createDimension('xv_c', len(xv_c))
 
@@ -126,11 +126,11 @@ for tind in range(len(time)):
 	xv_c_var.units = 'degrees_E'
 	xv_c_var.long_name = 'C grid V point longitude'
 
-	v_var = netcdf_file.createVariable('u', 'f4', ('yv_c', 'xv_c',))
+	v_var = netcdf_file.createVariable('u', 'f4', ('xv_c', 'yv_c',))
 	v_var.units = 'm/s'
 	v_var.long_name = 'meridional velocity on C grid'
 
-	ti[:] = time[tind] 
+	ti[0] = time[tind] 
 	yv_c = yv_c[:]
 	xv_c = xv_c[:]
 	v_var[...] = v_C
