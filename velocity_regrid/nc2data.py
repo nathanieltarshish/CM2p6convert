@@ -36,7 +36,7 @@ for file in files:
 		continue
 
 	netcdf_file = nc.Dataset(args.input+file)
-	outfile = args.out+file[0:len(file)-3]+'.data'
+	outfile = args.out+file[0]+'.'+file[1:len(file)-3]+'.data'
 
 	if file[0] == 'U':
 		u = netcdf_file.variables['u'][...]
