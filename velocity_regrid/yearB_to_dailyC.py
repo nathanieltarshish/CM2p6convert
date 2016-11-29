@@ -35,7 +35,7 @@ half_len_data.close()
 
 # path2file = '/archive/Richard.Slater/CM2.6/CM2.6_A_Control-1860_V03/history/'
 # filename = '02020101.ocean_minibling_surf_field.nc'
-
+#args.B_vel = /archive/Richard.Slater/CM2.6/CM2.6_A_Control-1860_V03/history/02020101.ocean_minibling_surf_field.nc
 vel_data = nc.Dataset(args.B_vel)
 lat_U = vel_data.variables['yu_ocean'][0:2107]
 lon_U = vel_data.variables['xu_ocean'][...]
@@ -118,8 +118,8 @@ for tind in range(len(time)):
 	u_var.long_name = 'zonal velocity on C grid'
 
 	ti[0] = time[tind]
-	yu_c = yu_c[:]
-	xu_c = xu_c[:]
+	yu_c_var[:] = yu_c[:]
+	xu_c_var[:] = xu_c[:]
 	u_var[...] = u_C 
 
 	netcdf_file.close()
@@ -146,13 +146,13 @@ for tind in range(len(time)):
 	xv_c_var.units = 'degrees_E'
 	xv_c_var.long_name = 'C grid V point longitude'
 
-	v_var = netcdf_file.createVariable('u', 'f4', ('xv_c', 'yv_c',))
+	v_var = netcdf_file.createVariable('v', 'f4', ('xv_c', 'yv_c',))
 	v_var.units = 'm/s'
 	v_var.long_name = 'meridional velocity on C grid'
 
 	ti[0] = time[tind] 
-	yv_c = yv_c[:]
-	xv_c = xv_c[:]
+	yv_c_var[:] = yv_c[:]
+	xv_c_var[:] = xv_c[:]
 	v_var[...] = v_C
 
 	netcdf_file.close()
