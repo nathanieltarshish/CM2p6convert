@@ -43,6 +43,6 @@ for file in files:
 		write_field(outfile, u)
 	
 	if file[0] == 'V':
-		v = netcdf_file.variables['u'][...]
+		v = netcdf_file.variables['v'][...]
 		write_field(outfile, v)
 
