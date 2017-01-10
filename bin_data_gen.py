@@ -127,7 +127,7 @@ if args.plot:
 
 # write out depth as bathy.bin
 bath_file = out_dir+'bathy.bin'
-write_field(bath_file, depth)
+write_field(bath_file, depth.T) #transpose to reverse array ordering
 
 # write out delY as delY.bin
 delY_file = out_dir+'delY.bin'
