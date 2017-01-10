@@ -40,9 +40,9 @@ for file in files:
 
 	if file[0] == 'U':
 		u = netcdf_file.variables['u'][...]
-		write_field(outfile, u)
+		write_field(outfile, u.T) #transpose to reverse array ordering
 	
 	if file[0] == 'V':
 		v = netcdf_file.variables['v'][...]
-		write_field(outfile, v)
+		write_field(outfile, v.T) #transpose to reverse array ordering
 
